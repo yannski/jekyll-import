@@ -27,9 +27,10 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w[README.markdown LICENSE]
 
   # runtime dependencies
-  s.add_runtime_dependency('jekyll', ENV['JEKYLL_VERSION'] ? "~> #{ENV['JEKYLL_VERSION']}" : '>= 1.4')
+  s.add_runtime_dependency('jekyll', ENV['JEKYLL_VERSION'] ? "~> #{ENV['JEKYLL_VERSION']}" : '>= 3.2')
   s.add_runtime_dependency('fastercsv')
   s.add_runtime_dependency('nokogiri')
+  s.add_runtime_dependency('reverse_markdown')
 
   # development dependencies
   s.add_development_dependency('rake', "~> 10.1.0")

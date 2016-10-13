@@ -11,6 +11,7 @@ module JekyllImport
           uri
           time
           jekyll
+          reverse_markdown
         ])
       end
 
@@ -239,17 +240,7 @@ module JekyllImport
 
       # Convert preserving HTML tables as per the markdown docs.
       def self.html_to_markdown(content)
-        preserve = ["table", "tr", "th", "td"]
-        preserve.each do |tag|
-          content.gsub!(/<#{tag}/i, "$$" + tag)
-          content.gsub!(/<\/#{tag}/i, "||" + tag)
-        end
-        content = Nokogiri::HTML(content.gsub("'", "''")).text
-        preserve.each do |tag|
-          content.gsub!("$$" + tag, "<" + tag)
-          content.gsub!("||" + tag, "</" + tag)
-        end
-        content
+        ReverseMarkdown.convert content
       end
 
       # Adds pygments highlight tags to code blocks in posts that use
