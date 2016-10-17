@@ -251,25 +251,27 @@ module JekyllImport
       # so I can assume the block is JavaScript if it contains a
       # semi-colon.
       def self.add_syntax_highlights(content, redirect_dir)
-        lines = content.split("\n")
-        block, indent, lang, start = false, /^    /, nil, nil
-        lines.each_with_index do |line, i|
+        FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
+
+        block, indent, start = false, /^    /, nil, nil
+        content.each_line.inject([]){|m, line|
           if !block && line =~ indent
             block = true
-            lang = "python"
-            start = i
+            m << "```"
+            m << line.sub(indent, "").strip
           elsif block
-            lang = "javascript" if line =~ /;$/
-            block = line =~ indent && i < lines.size - 1 # Also handle EOF
+            block = line =~ indent
             if !block
-              lines[start] = "{% highlight #{lang} %}"
-              lines[i - 1] = "{% endhighlight %}"
+              m << "```"
+              m << line.strip
+            else
+              m << line.sub(indent, "").strip
             end
-            FileUtils.cp(redirect_dir + "index.html", redirect_dir + "../" + "index.html")
-            lines[i] = lines[i].sub(indent, "")
+          else
+            m << line.strip
           end
-        end
-        lines.join("\n")
+          m
+        }.join("\n")
       end
 
       def self.save_photo(url, ext)
