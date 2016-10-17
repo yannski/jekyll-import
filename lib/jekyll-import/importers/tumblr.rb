@@ -221,6 +221,7 @@ module JekyllImport
                        else
                          Jekyll::Document.new(File.expand_path("_posts/tumblr/#{post[:name]}"), site: site, collection: site.posts).url
                        end
+          jekyll_url = "/" + post[:name].split("-", 4).join("/").sub(".md", "")
           redirect_dir = tumblr_url.sub(/\//, "") + "/"
           FileUtils.mkdir_p redirect_dir
           File.open(redirect_dir + "index.html", "w") do |f|
